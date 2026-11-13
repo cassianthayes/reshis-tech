@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="ru">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <title>{{ 'Регистрация' if registering else 'Вход' }}</title>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css" />
+    </head>
+    <body>
+        <main class="container">
+            <h1>{{ 'Регистрация' if registering else 'Вход' }}</h1>
+            <form method="post">
+                <label for="username">Имя пользователя</label>
+                <input id="username" name="username" value="{{ username }}" autocomplete="username" required />
+                <label for="password">Пароль</label>
+                <input id="password" name="password" type="password" autocomplete="{{ 'new-password' if registering else 'current-password' }}" required />
+                <button type="submit">{{ 'Зарегистрироваться' if registering else 'Войти' }}</button>
+            </form>
+            {% if error %}
+            <p role="alert">{{ error }}</p>
+            {% endif %}
+            {% if registering %}
+            <a href="{{ url_for('login') }}">Уже есть аккаунт? Войти</a>
+            {% else %}
+            <a href="/register">Зарегистрироваться</a>
+            {% endif %}
+        </main>
+    </body>
+</html>

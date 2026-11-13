@@ -12,6 +12,10 @@
     <body>
         <main class="container">
             <h1>Прогноз продаж авиабилетов</h1>
+            <form action="{{ url_for('logout') }}" method="post">
+                <p>{{ username }}</p>
+                <button type="submit" class="outline">Выйти</button>
+            </form>
             <form method="post">
                 <label for="route">Маршрут</label>
                 <select id="route" name="route">
@@ -20,11 +24,7 @@
                     {% endfor %}
                 </select>
                 <label for="date">Дата</label>
-                <select id="date" name="date">
-                    {% for day in dates %}
-                    <option value="{{ day }}" {% if day == date %}selected{% endif %}>{{ day }}</option>
-                    {% endfor %}
-                </select>
+                <input id="date" name="date" type="date" value="{{ date }}" min="{{ dates[0] }}" max="{{ dates[-1] }}" required />
                 <label for="price">Цена билета, ₽</label>
                 <input id="price" name="price" type="number" min="0" step="any" value="{{ price }}" required />
                 <button type="submit">Посчитать</button>
