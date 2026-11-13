@@ -12,6 +12,32 @@
     <body>
         <main class="container">
             <h1>Прогноз продаж авиабилетов</h1>
+            <form method="post">
+                <label for="route">Маршрут</label>
+                <select id="route" name="route">
+                    {% for code, item in routes.items() %}
+                    <option value="{{ code }}" {% if code == route %}selected{% endif %}>{{ item.name }}</option>
+                    {% endfor %}
+                </select>
+                <label for="date">Дата</label>
+                <select id="date" name="date">
+                    {% for day in dates %}
+                    <option value="{{ day }}" {% if day == date %}selected{% endif %}>{{ day }}</option>
+                    {% endfor %}
+                </select>
+                <label for="price">Цена билета, ₽</label>
+                <input id="price" name="price" type="number" min="0" step="any" value="{{ price }}" required />
+                <button type="submit">Посчитать</button>
+            </form>
+            {% if error %}
+            <p role="alert">{{ error }}</p>
+            {% endif %}
+            {% if result %}
+            <h2>Результат</h2>
+            <p>Спрос: {{ result.demand | round(2) }} пассажиров</p>
+            <p>Ожидаемые продажи: {{ result.sales | round(2) }} билетов</p>
+            <p>Мест: {{ result.seats }}</p>
+            {% endif %}
         </main>
     </body>
 </html>
