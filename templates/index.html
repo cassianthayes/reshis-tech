@@ -37,6 +37,39 @@
             <p>Спрос: {{ result.demand | round(2) }} пассажиров</p>
             <p>Ожидаемые продажи: {{ result.sales | round(2) }} билетов</p>
             <p>Мест: {{ result.seats }}</p>
+            <h2>Спрос по квантилям</h2>
+            <p>Крупная точка — медиана (0,5). Пунктир — количество мест.</p>
+            <canvas id="chart" role="img" aria-label="График спроса по квантилям"></canvas>
+            <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.8/dist/chart.umd.min.js"></script>
+            <script>
+                new Chart(document.getElementById("chart"), {
+                    type: "line",
+                    data: {
+                        labels: [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9],
+                        datasets: [
+                            {
+                                label: "Спрос",
+                                data: {{ result.quantiles | tojson }},
+                                borderColor: "#1095c1",
+                                pointRadius: [3, 3, 3, 3, 7, 3, 3, 3, 3],
+                            },
+                            {
+                                label: "Места",
+                                data: Array(9).fill({{ result.seats | tojson }}),
+                                borderColor: "#888",
+                                borderDash: [6, 6],
+                                pointRadius: 0,
+                            },
+                        ],
+                    },
+                    options: {
+                        scales: {
+                            x: { title: { display: true, text: "Квантиль" } },
+                            y: { title: { display: true, text: "Пассажиры" } },
+                        },
+                    },
+                });
+            </script>
             {% endif %}
         </main>
     </body>

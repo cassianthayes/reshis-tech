@@ -30,11 +30,12 @@ def index():
                 raise ValueError
             flight = forecast[route, date]
             params = routes[route]
-            demand = float(flight["0.5_base_demand"]) - float(params["price_sensitivity"]) * (
-                amount - float(params["base_price"])
-            )
+            adjustment = float(params["price_sensitivity"]) * (amount - float(params["base_price"]))
+            quantiles = [float(flight[f"{i / 10:.1f}_base_demand"]) - adjustment for i in range(1, 10)]
+            demand = quantiles[4]
             seats = int(flight["seats"])
-            result = {"demand": demand, "sales": min(seats, max(0, demand)), "seats": seats}
+            result = {"demand": demand, "sales": min(seats, max(0, demand)),
+                      "seats": seats, "quantiles": quantiles}
         except (ValueError, KeyError):
             error = "Проверьте маршрут, дату и цену. Цена должна быть числом не меньше нуля."
 
